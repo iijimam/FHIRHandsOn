@@ -1,0 +1,23 @@
+### サンプルデータロード後のリソース数などの確認が行えます。
+### リソース単体をGETする場合、データ件数が多いので、最後に _count=10 のように、応答件数を指定してください。
+
+### Loinc の code=4548-4 (Hemoglobin Alc/Hemoglobin.total in Bolld) の Observationを取得
+### 425件返る予定
+GET http://localhost/irishealth/csp/healthshare/r4fhirnamespace/fhir/r4/Observation?code=4548-4&_count=10
+Authorization: Basic SuperUser:SYS
+Accept: application/json;charset=utf-8
+
+### Loinc の code=4548-4 (Hemoglobin A1c/Hemoglobin.total in Blood) の Observation と関連するPatientリソース入手
+### （Observation リソースでcode=4548-4 で登録されている情報を取得）
+### 全体で34件返る予定
+GET http://localhost/irishealth/csp/healthshare/r4fhirnamespace/fhir/r4/Patient?_has:Observation:patient:code=4548-4&_count=10
+Authorization: Basic SuperUser:SYS
+Accept: application/json;charset=utf-8
+
+### Loinc の code=4548-4 (Hemoglobin A1c/Hemoglobin.total in Blood) 
+### HbA1cの値が 5.7~6.4% の範囲のObservationを探す。
+### （Observation リソースでcode=4548-4 で登録されている情報を取得）
+### 全体で250件返る予定
+GET http://localhost/irishealth/csp/healthshare/r4fhirnamespace/fhir/r4/Observation?code=4548-4&value-quantity=ge5.7&value-quantity=le6.4&_count=50
+Authorization: Basic SuperUser:SYS
+Accept: application/json;charset=utf-8
