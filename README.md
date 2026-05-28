@@ -27,7 +27,7 @@ FHIRPath を利用して FHIR リソース内の情報を辿り、患者情報�
 
     サンプルデータを利用して、2 型糖尿病予備軍となる患者を探し出し、健康維持プログラムへの参加を勧めるため、学習した FHIR SearchParameter、FHIRPath を利用して患者情報を抽出します。 
 
-
+- [その他：データ全消去方法](#その他データ全消去方法)
 
 ## 事前準備
 
@@ -44,6 +44,8 @@ python -m venv fhirenv
 ```
 ./fhirenv/Scripts/activate
 ```
+
+> 📝メモ：上記コマンド実行による仮想環境作成のほかに、VSCode のメニューから作成することもできます（Jupyterノートブック初回実行時、どのPythonを使用するか確認が出てきます。実行前に仮想環境が未作成であっても作成しながら進めていくことができます）。
 
 ### 2. サンプルデータのロード
 
@@ -114,3 +116,34 @@ Jupyter ノートブックで操作しながら進めていきます。
 サンプルデータロード後、以下のノートブックを参照しながら進めていきます。
 
 [Try-FHIRPath-Advanced.ipynb](./Try-FHIRPath-Advanced.ipynb)
+
+---
+
+## その他：データ全消去方法
+
+事前に以下情報を調べます。
+
+- FHIRリポジトリのネームスペース
+
+    例）R4FHIRNAMESPACE
+
+- FHIRリポジトリのエンドポイント
+
+    例）/csp/healthshare/r4fhirnamespace/fhir/r4
+
+IRIS ターミナルを開き、以下の手順で削除します。
+
+> ネームスペース：R4FHIRNAMESPACE、エンドポイント：/csp/healthshare/r4fhirnamespace/fhir/r4　での実行例
+
+```
+set $namespace="R4FHIRNAMESPACE"
+kill
+//引数にFHIRのエンドポイントを指定します
+set repoInstance=##class(HS.FHIRServer.RepoInstance).FindByUrl("/csp/healthshare/r4fhirnamespace/fhir/r4")
+set repoManager=##class(HS.FHIRServer.Storage.Json.RepoManager).getInstance(repoInstance.repo)
+//データだけ削除する場合の指定です。必ず指定してください
+set options("deleteDataOnly")=1
+do repoManager.DeleteService(repoInstance.serviceId,.options)
+
+```
+
